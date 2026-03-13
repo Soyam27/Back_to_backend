@@ -11,8 +11,8 @@ const uploadToCloud = async (filePath) => {
     if (!filePath) return null;
     const byteArrayBuffer = fs.readFileSync(filePath);
     try {
-        const response = await new Promise({ resource_type: "auto" },(resolve, reject) => {
-            cloudinary.v2.uploader.upload_stream((error, uploadResult) => {
+        const response = await new Promise((resolve, reject) => {
+            cloudinary.uploader.upload_stream({ resource_type: "auto" },(error, uploadResult) => {
                 if (error) {
                     return reject(error);
                 }
