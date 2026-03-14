@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerUser } from '../controller/user.controller.js';
+import { registerUser,login } from '../controller/user.controller.js';
 import { upload } from '../middlewares/multer.middleware.js';
 
 export const userRouter = express.Router()
@@ -10,3 +10,4 @@ userRouter.route("/register").post(upload.fields(
         {name: 'coverImage', maxCount: 1}
     ]
 ),registerUser)
+userRouter.route('/login').post(login);
