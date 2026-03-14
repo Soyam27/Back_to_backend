@@ -20,8 +20,10 @@ const uploadToCloud = async (filePath) => {
             }).end(byteArrayBuffer);
         })
         console.log(`Buffer upload_stream wth promise success - ${response.public_id}`);
+        return response;
     } catch (error) {
         console.error(error);
+        fs.unlink(filePath);
     }
 }
 

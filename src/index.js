@@ -4,7 +4,7 @@ import { connectDb } from './db/index.js';
 import dotevn from "dotenv";
 
 dotevn.config({
-    path: './env'
+    path: './.env'
 })
 
 connectDb(`${process.env.MONGODB_URI}/${DB_NAME}`)

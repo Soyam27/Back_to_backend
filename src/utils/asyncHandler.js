@@ -5,7 +5,7 @@ const asyncHandler = (requestHandler) =>{
 export default asyncHandler;
 
 
-
+//Promise.resolve().then(()=>fn(req,res,next)).catch(...)
 
 
 
