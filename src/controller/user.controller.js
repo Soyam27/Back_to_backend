@@ -4,6 +4,7 @@ import USER from "../models/user.model.js";
 import uploadToCloud from "../utils/cloudinary.config.js";
 import APIResponse from "../utils/apiResponse.js";
 import { generateAccessAndRefreshToken } from "../utils/generateAccessAndRefreshToken.js";
+import jwt from 'jsonwebtoken'
 
 export const registerUser = asyncHandler(async (req,res) =>{
     const {fullName,username,email,password} = req.body;
@@ -113,4 +114,34 @@ export const logout = async (req,res) =>{
     .clearCookie('refreshtoken',options)
     .json(new APIResponse(200,{},"User logged in successfully"))
 }
+
+export const refreshAccessToken = asyncHandler(async (req,res) =>{
+    const {refreshtoken} = req.cookies;
+
+    if(!refreshtoken) throw new APIError(401,"Refresh Token not found. Not Authorized");
+
+    const decoded = jwt.verify(refreshtoken,process.env.REFRESH_TOKEN_SECRET);
+
+    const user = await USER.findById({"_id":decoded._id});
+
+    if(!user) throw new APIError(404,"Invalid Refresh Token. User not found");
+
+    if(!(user.refreshToken===refreshtoken)) throw new APIError(401,"Refresh token is expired or used");
+
+    const {accessToken,refreshToken } = await generateAccessAndRefreshToken(user);
+
+    const options = {
+        httpOnly: true,
+        secure: true,
+    }
+
+    res
+    .status(200)
+    .cookie('accessToken',accessToken,options)
+    .cookie('refreshtoken',refreshToken,options)
+    .json(new APIResponse(200,{
+        accessToken,
+        refreshToken,
+    },"User refreshed successfully"))
+})
 
