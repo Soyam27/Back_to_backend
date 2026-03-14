@@ -17,7 +17,7 @@ export const registerUser = asyncHandler(async (req,res) =>{
     }
 
     if(await USER.findOne({
-        $or: [{'email':email}, {'fullName':fullName}]
+        $or: [{'email':email}, {'username':username}]
     })){
         throw new APIError(409,"User already exists. Try to login");
     }
@@ -29,10 +29,10 @@ export const registerUser = asyncHandler(async (req,res) =>{
         throw new APIError(400,"Every Field is required");
     }
 
-    const avatarUrl = (await uploadToCloud(avatar)).url
+    const avatarUrl = (await uploadToCloud(avatar))?.url
     let coverImageUrl;
     if(coverImage){
-        coverImageUrl = (await uploadToCloud(coverImage)).url
+        coverImageUrl = (await uploadToCloud(coverImage))?.url
     }
 
     const user = await USER.create({

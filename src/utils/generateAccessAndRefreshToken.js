@@ -9,7 +9,7 @@ export const generateAccessAndRefreshToken = async (user) =>{
         if(!accessToken || !refreshToken) throw new APIError(400,"Token generation error");
     
         user.refreshToken = refreshToken;
-        user.save({validateBeforeSave:false});
+        await user.save({validateBeforeSave:false});
         return {accessToken,refreshToken};
     }
     catch(err){
