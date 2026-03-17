@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { userRouter } from './routes/user.routes.js';
+import { channelRouter } from './routes/channel.routes.js';
 
 export const app = express();
 
@@ -17,6 +18,7 @@ app.use(cookieParser());
 app.use(express.static('public'));
 
 app.use("/user",userRouter)
+app.use("/channel",channelRouter)
 
 app.use((err, req, res, next) => {
     console.log(err)
